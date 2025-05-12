@@ -1,27 +1,7 @@
 'use client'
-import { AnimatedBackground } from '@/components/ui/animated-background'
 import { TextLoop } from '@/components/ui/text-loop'
-import { MonitorIcon, MoonIcon, SunIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
-
-const THEMES_OPTIONS = [
-  {
-    label: 'Light',
-    id: 'light',
-    icon: <SunIcon className="h-4 w-4" />,
-  },
-  {
-    label: 'Dark',
-    id: 'dark',
-    icon: <MoonIcon className="h-4 w-4" />,
-  },
-  {
-    label: 'System',
-    id: 'system',
-    icon: <MonitorIcon className="h-4 w-4" />,
-  },
-]
 
 function ThemeSwitch() {
   const [mounted, setMounted] = useState(false)
@@ -35,34 +15,23 @@ function ThemeSwitch() {
     return null
   }
 
+  const handleThemeChange = () => {
+    // Cycle through themes: light -> dark -> system -> light
+    const themeOrder = ['light', 'dark']
+    const currentIndex = themeOrder.indexOf(theme ?? 'dark')
+    const nextIndex = (currentIndex + 1) % themeOrder.length
+    setTheme(themeOrder[nextIndex])
+  }
+
   return (
-    <AnimatedBackground
-      className="pointer-events-none rounded-lg bg-zinc-100 dark:bg-zinc-800"
-      defaultValue={theme}
-      transition={{
-        type: 'spring',
-        bounce: 0,
-        duration: 0.2,
-      }}
-      enableHover={false}
-      onValueChange={(id) => {
-        setTheme(id as string)
-      }}
+    <button
+      onClick={handleThemeChange}
+      className="h-8 cursor-pointer rounded-lg px-4 py-0.5 transition-colors duration-200 hover:bg-zinc-200 md:h-5 md:px-2 dark:hover:bg-zinc-800"
+      aria-label="Toggle theme"
+      type="button"
     >
-      {THEMES_OPTIONS.map((theme) => {
-        return (
-          <button
-            key={theme.id}
-            className="inline-flex h-7 w-7 items-center justify-center text-zinc-500 transition-colors duration-100 focus-visible:outline-2 data-[checked=true]:text-zinc-950 dark:text-zinc-400 dark:data-[checked=true]:text-zinc-50"
-            type="button"
-            aria-label={`Switch to ${theme.label} theme`}
-            data-id={theme.id}
-          >
-            {theme.icon}
-          </button>
-        )
-      })}
-    </AnimatedBackground>
+      <div className="h-2 w-2 rounded-full bg-zinc-900/80 dark:bg-zinc-100" />
+    </button>
   )
 }
 
@@ -70,13 +39,15 @@ export function Footer() {
   return (
     <footer className="mt-24 border-t border-zinc-100 px-0 py-4 dark:border-zinc-800">
       <div className="flex items-center justify-between">
-        <a href="https://github.com/ibelick/nim" target="_blank">
+        <a href="https://github.com/ibelick/Stag Graphics" target="_blank">
           <TextLoop className="text-xs text-zinc-500">
-            <span>© 2024 Nim.</span>
+            <span>© 2024 Stag Graphics.</span>
             <span>Built with Motion-Primitives.</span>
           </TextLoop>
         </a>
-        <div className="text-xs text-zinc-400">
+        <div className="flex items-center gap-2 text-xs text-zinc-400">
+          <a href="https://stagsections.com">Stag Sections</a>
+          |
           <ThemeSwitch />
         </div>
       </div>

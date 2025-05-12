@@ -13,6 +13,7 @@ type WorkExperience = {
   end: string
   link: string
   id: string
+  archived?: boolean
 }
 
 type BlogPost = {
@@ -49,28 +50,45 @@ export const PROJECTS: Project[] = [
 
 export const WORK_EXPERIENCE: WorkExperience[] = [
   {
-    company: 'Reglazed Studio',
-    title: 'CEO',
-    start: '2024',
+    company: 'Player Coach Connection',
+    title: 'Full-Stack Developer',
+    start: '2021',
     end: 'Present',
-    link: 'https://ibelick.com',
+    link: 'https://playercoachconnection.com',
     id: 'work1',
   },
   {
-    company: 'Freelance',
-    title: 'Design Engineer',
-    start: '2022',
-    end: '2024',
-    link: 'https://ibelick.com',
+    company: 'ABCO Inc',
+    title: 'Full-Stack Developer | Graphic Designer',
+    start: '2021',
+    end: 'Present',
+    link: 'https://abcoinc.com',
     id: 'work2',
   },
   {
-    company: 'Freelance',
-    title: 'Front-end Developer',
-    start: '2017',
-    end: 'Present',
-    link: 'https://ibelick.com',
+    company: 'Meraki Talent Agency',
+    title: 'Wordpress Developer',
+    start: '2014',
+    end: '2020',
+    link: 'https://merakitalentagency.com',
     id: 'work3',
+  },
+  {
+    company: 'Med-Lift',
+    title: 'Wordpress Developer',
+    start: '2016',
+    end: '2018',
+    link: 'https://med-lift.com',
+    id: 'work4',
+    archived: true,
+  },
+  {
+    company: 'Southern Belle Originals',
+    title: 'Graphic Designer',
+    start: '2014',
+    end: '2016',
+    link: 'https://southernbelleoriginals.com',
+    id: 'work5',
   },
 ]
 
@@ -99,21 +117,29 @@ export const BLOG_POSTS: BlogPost[] = [
 
 export const SOCIAL_LINKS: SocialLink[] = [
   {
-    label: 'Github',
-    link: 'https://github.com/ibelick',
+    label: 'BlueSky',
+    link: 'https://bsky.app/profile/staggraphics.com',
+  },
+  {
+    label: 'Facebook',
+    link: 'https://www.facebook.com/staggraphics/',
   },
   {
     label: 'Twitter',
-    link: 'https://twitter.com/ibelick',
+    link: 'https://twitter.com/staggraphics',
   },
   {
     label: 'LinkedIn',
-    link: 'https://www.linkedin.com/in/ibelick',
+    link: 'https://www.linkedin.com/company/staggraphics',
   },
   {
     label: 'Instagram',
-    link: 'https://www.instagram.com/ibelick',
+    link: 'https://www.instagram.com/staggraphics',
+  },
+  {
+    label: 'TikTok',
+    link: 'https://www.tiktok.com/@staggraphics',
   },
 ]
 
-export const EMAIL = 'your@email.com'
+export const EMAIL = 'christian@staggraphics.com'

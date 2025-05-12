@@ -12,13 +12,17 @@ import {
 } from '@/components/ui/morphing-dialog'
 import Link from 'next/link'
 import { AnimatedBackground } from '@/components/ui/animated-background'
-import {
-  PROJECTS,
-  WORK_EXPERIENCE,
-  BLOG_POSTS,
-  EMAIL,
-  SOCIAL_LINKS,
-} from './data'
+import { useEffect, useState } from 'react'
+import { PROJECTS, WORK_EXPERIENCE, EMAIL, SOCIAL_LINKS } from './data'
+import { getAllBlogPosts } from '../lib/contentful'
+
+// Types
+type BlogPost = {
+  title: string
+  description: string
+  link: string
+  uid: string
+}
 
 const VARIANTS_CONTAINER = {
   hidden: { opacity: 0 },
@@ -124,6 +128,26 @@ function MagneticSocialLink({
 }
 
 export default function Personal() {
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
+  const [isLoadingPosts, setIsLoadingPosts] = useState(true)
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        setIsLoadingPosts(true)
+        const posts = await getAllBlogPosts()
+        // Limit to 4 posts for the homepage (changed from 3)
+        setBlogPosts(posts.slice(0, 4))
+      } catch (error) {
+        console.error('Failed to fetch blog posts:', error)
+      } finally {
+        setIsLoadingPosts(false)
+      }
+    }
+
+    fetchPosts()
+  }, [])
+
   return (
     <motion.main
       className="space-y-24"
@@ -137,8 +161,13 @@ export default function Personal() {
       >
         <div className="flex-1">
           <p className="text-zinc-600 dark:text-zinc-400">
-            Focused on creating intuitive and performant web experiences.
-            Bridging the gap between design and development.
+            10+ years of experience in web and graphic design, specializing in
+            creating user-driven e-commerce experiences for startups. Proficient
+            in Adobe design suites and web development with a focus on Next.js.
+            Reduced costs by 80% within five days in my current role by
+            implementing a custom asset management solution. Driven to leverage
+            expertise and creativity to deliver innovative solutions and propel
+            business growth.
           </p>
         </div>
       </motion.section>
@@ -147,7 +176,15 @@ export default function Personal() {
         variants={VARIANTS_SECTION}
         transition={TRANSITION_SECTION}
       >
-        <h3 className="mb-5 text-lg font-medium">Selected Projects</h3>
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="mb-5 text-lg font-medium">Selected Projects</h3>
+          <Link
+            href="/projects"
+            className="text-sm text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+          >
+            View all →
+          </Link>
+        </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {PROJECTS.map((project) => (
             <div key={project.name} className="space-y-2">
@@ -201,7 +238,7 @@ export default function Personal() {
                     </p>
                   </div>
                   <p className="text-zinc-600 dark:text-zinc-400">
-                    {job.start} - {job.end}
+                    {job.start} - {job.end} {job.archived && '(Archived)'}
                   </p>
                 </div>
               </div>
@@ -214,7 +251,15 @@ export default function Personal() {
         variants={VARIANTS_SECTION}
         transition={TRANSITION_SECTION}
       >
-        <h3 className="mb-3 text-lg font-medium">Blog</h3>
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-lg font-medium">Blog</h3>
+          <Link
+            href="/blog"
+            className="text-sm text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+          >
+            View all →
+          </Link>
+        </div>
         <div className="flex flex-col space-y-0">
           <AnimatedBackground
             enableHover
@@ -225,23 +270,37 @@ export default function Personal() {
               duration: 0.2,
             }}
           >
-            {BLOG_POSTS.map((post) => (
-              <Link
-                key={post.uid}
-                className="-mx-3 rounded-xl px-3 py-3"
-                href={post.link}
-                data-id={post.uid}
-              >
-                <div className="flex flex-col space-y-1">
-                  <h4 className="font-normal dark:text-zinc-100">
-                    {post.title}
-                  </h4>
-                  <p className="text-zinc-500 dark:text-zinc-400">
-                    {post.description}
-                  </p>
-                </div>
-              </Link>
-            ))}
+            {isLoadingPosts ? (
+              <div className="flex h-40 items-center justify-center">
+                <p className="text-zinc-500 dark:text-zinc-400">
+                  Loading posts...
+                </p>
+              </div>
+            ) : blogPosts.length === 0 ? (
+              <div className="flex h-40 items-center justify-center">
+                <p className="text-zinc-500 dark:text-zinc-400">
+                  No posts found
+                </p>
+              </div>
+            ) : (
+              blogPosts.map((post) => (
+                <Link
+                  key={post.uid}
+                  className="-mx-3 rounded-xl px-3 py-3"
+                  href={post.link}
+                  data-id={post.uid}
+                >
+                  <div className="flex flex-col space-y-1">
+                    <h4 className="font-normal dark:text-zinc-100">
+                      {post.title}
+                    </h4>
+                    <p className="text-zinc-500 dark:text-zinc-400">
+                      {post.description}
+                    </p>
+                  </div>
+                </Link>
+              ))
+            )}
           </AnimatedBackground>
         </div>
       </motion.section>

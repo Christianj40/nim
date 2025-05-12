@@ -1,23 +1,28 @@
 'use client'
 import { TextEffect } from '@/components/ui/text-effect'
 import Link from 'next/link'
+import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 
 export function Header() {
+  const pathname = usePathname()
   return (
     <header className="mb-8 flex items-center justify-between">
-      <div>
+      <div className="flex items-center gap-2">
         <Link href="/" className="font-medium text-black dark:text-white">
-          Julien Nim
+          <Image src="/square-logo.svg" alt="Stag Graphics" width={32} height={32} />
         </Link>
-        <TextEffect
-          as="p"
-          preset="fade"
-          per="char"
-          className="text-zinc-600 dark:text-zinc-500"
-          delay={0.5}
-        >
-          Design Engineer
-        </TextEffect>
+        {pathname !== '/sections' && (
+          <TextEffect
+            as="p"
+            preset="fade"
+            per="char"
+            className="text-black dark:text-white"
+            delay={0.5}
+          >
+            Stag Graphics
+          </TextEffect>
+        )}
       </div>
     </header>
   )
