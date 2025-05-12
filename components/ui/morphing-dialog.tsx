@@ -237,10 +237,13 @@ function MorphingDialogContainer({ children }: MorphingDialogContainerProps) {
 
   if (!mounted) return null
 
-  return createPortal(
-    <AnimatePresence initial={false} mode="sync">
-      {isOpen && (
-        <>
+  if (typeof document === 'undefined') return null
+
+  // Directly return the portal content
+  return (
+    isOpen && mounted ? 
+      createPortal(
+        <AnimatePresence initial={false} mode="sync">
           <motion.div
             key={`backdrop-${uniqueId}`}
             className="fixed inset-0 h-full w-full bg-white/40 backdrop-blur-sm dark:bg-black/40"
@@ -251,11 +254,10 @@ function MorphingDialogContainer({ children }: MorphingDialogContainerProps) {
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             {children}
           </div>
-        </>
-      )}
-    </AnimatePresence>,
-    document.body,
-  )
+        </AnimatePresence>,
+        document.body
+      ) : null
+  ) as React.ReactElement
 }
 
 export type MorphingDialogTitleProps = {
