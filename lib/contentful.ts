@@ -68,6 +68,7 @@ export function transformContentfulProject(project: any) {
     coverCaption: fields.coverImage?.fields?.description || '',
     content: fields.content || '',
     technologies: fields.technologies || [],
+    projectType: fields.projectType || [],
     projectUrl: fields.projectUrl || '',
     githubUrl: fields.githubUrl || '',
     completionDate: fields.completionDate || null,
